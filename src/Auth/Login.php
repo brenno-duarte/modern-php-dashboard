@@ -5,10 +5,10 @@ namespace Dashboard\Auth;
 use Dashboard\HelpersTrait;
 use Dashboard\Resource\Messages;
 use Dashboard\Router;
-use Dashboard\Template\Template;
+use Dashboard\Template\AbstractTemplate;
 use Katrina\Connection\Connection;
 
-class Login 
+class Login extends AbstractTemplate
 {
     use HelpersTrait;
 
@@ -54,10 +54,10 @@ class Login
     public function setAuth()
     {
         $auth = $this->auth();
-        $auth->setUsersTableName('auth_users');
+        $auth->setUsersTableName('users');
         $auth->setEmailField('username');
         $auth->setPasswordField('password');
-        $auth->setLoginField('username');
+        $auth->setLoginField('email');
 
         return $auth;
     }
@@ -68,9 +68,6 @@ class Login
             Messages::add("error-login,", "User is not logged in", "danger");
             Router::toRoute('');
         }
-
-        /* Messages::add("User is not logged in", "danger");
-            Router::toRoute(''); */
     }
 
     public function logout()

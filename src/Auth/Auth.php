@@ -43,41 +43,28 @@ class Auth
 
     public function user(string $user)
     {
-        //$class_name = $this->getClassName($user);        
-
         return $_SESSION['user'];
-
-        //return session()->get(strtolower($class_name));
     }
 
     public function login(string $user): bool
     {
-        //$class_name = $this->getClassName($user);
-        
         $_SESSION['user'] = $user;
 
         return true;
-        //return session()->put($user, $user);
     }
 
     public function logout(string $user): bool
     {
-        //$class_name = $this->getClassName($user);
-
         try {
             unset($_SESSION['user']);
             return true;
         } catch (\Throwable $e) {
             return false;
         }
-
-        //return session()->forget($user);
     }
 
     public function isUserLoggedIn(string $user): bool
     {
-        //$class_name = $this->getClassName($user);
-
         if (isset($_SESSION['user']) || $_SESSION['user'] == $user) {
             return true;
         }
@@ -98,7 +85,7 @@ class Auth
         }
 
         $sql = "SELECT * FROM {$this->usersTableName} WHERE {$this->loginField} = '{$username}'";
-
+        
         $stmt = $this->connection->query($sql);
         $results = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -107,10 +94,6 @@ class Auth
         }
 
         return false;
-        
-        /* return !!count(array_filter($results, function (array $result) use ($password) {
-            return password_verify($password, $result[$this->passwordField]);
-        })); */
     }
 
     /**

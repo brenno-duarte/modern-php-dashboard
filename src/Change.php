@@ -3,9 +3,8 @@
 namespace Dashboard;
 
 use Dashboard\Template\AbstractTemplate;
-use Dashboard\Template\TemplateInterface;
 
-class Change implements TemplateInterface
+class Change extends AbstractTemplate
 {
     protected string $url = "/login-change";
     private string $menu_name = "Change Login";

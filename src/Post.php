@@ -4,9 +4,8 @@ namespace Dashboard;
 
 use Dashboard\Resource\Messages;
 use Dashboard\Template\AbstractTemplate;
-use Dashboard\Template\TemplateInterface;
 
-class Post implements TemplateInterface
+class Post extends AbstractTemplate
 {
     protected string $url = "/cadastrar";
     private string $menu_name = "Cadastrar";

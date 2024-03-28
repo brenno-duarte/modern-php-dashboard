@@ -7,18 +7,22 @@ session_start();
 use Dashboard\Auth\Login;
 use Dashboard\Change;
 use Dashboard\HelpersTrait;
+use Dashboard\Profile;
 use Dashboard\Router;
 
 class Template
 {
     use HelpersTrait;
 
-    //private ?Login $login = null;
     private static ?string $type = null;
     private static string $html;
     private array $default_class = [
         Login::class,
         Change::class
+    ];
+
+    private array $default_templates = [
+        Profile::class
     ];
 
     public function __construct(
@@ -82,12 +86,26 @@ class Template
 
     public function render(object $html)
     {
-        $this->verifyInternalTemplateByDefaultClass();
-
+        $internal_template = $this->verifyInternalTemplateByDefaultClass();
+        //dd($internal_template);
         $reflection = new \ReflectionProperty($html, 'html');
         $reflection_menu = new \ReflectionMethod($html, 'getMenuItens');
         $res = $reflection_menu->invoke($html);
 
+        /* if ($internal_template != null) {
+            $res = $internal_template;
+        } */
+
+        //$menu_name_internal = new \ReflectionProperty($internal_template, 'menu_name');
+        //$res = $menu_name_internal->invoke($internal_template);
+        /* $this->generateFullTemplate(
+            $menu_name_internal->getValue($internal_template),
+            strtolower($menu_name_internal->getValue($internal_template)). '.php',
+            strtolower($menu_name_internal->getValue($internal_template))
+        ); */
+
+        //dd($menu_name_internal->getValue($internal_template));
+        
         $uri = self::getUri();
         $routers = Router::getRouters();
 
@@ -169,7 +187,14 @@ class Template
         return $content;
     }
 
-    private function verifyInternalTemplateByDefaultClass(): Template
+    public static function breakLine(int $times = 1): void
+    {
+        for ($i=0; $i < $times; $i++) { 
+            echo '<br>';
+        }
+    }
+
+    private function verifyInternalTemplateByDefaultClass(): mixed
     {
         $uri = self::getUri()[0];
         $uri_withour_parameter = strtok($uri, '?');
@@ -188,9 +213,20 @@ class Template
             }
         }
 
+        foreach ($this->default_templates as $value) {
+            $class_name = (new \ReflectionClass($value))->getName();
+            $url = (new \ReflectionProperty($value, 'url'))->getDefaultValue();
+            $url = str_replace("/", "", $url);
+            //dd($url, $uri_withour_parameter);
+            if ($url == $uri_withour_parameter) {
+                $class = new $class_name;
+                return $class;
+            }
+        }
+
         $this->validateRouteType();
 
-        return $this;
+        return null;
     }
 
     private function includeTemplate(string $template_file, array $args = []): void
@@ -225,7 +261,7 @@ class Template
         string $menu_html,
         string $instance
     ): void {
-        $this->login->isLogged();
+        //$this->login->isLogged();
 
         ob_start();
         echo $this->renderTemplate('init.php', [
@@ -234,8 +270,8 @@ class Template
 
         echo $this->renderTemplate('init-header.php');
         echo $menu_html;
-        echo '<div class="card">
-        <div class="card-body">' . "\n";
+        /* echo '<div class="card">
+        <div class="card-body">' . "\n"; */
 
         echo $this->renderTemplate('close-header.php', [
             'menu_name' => $menu_name

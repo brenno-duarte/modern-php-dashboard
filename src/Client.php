@@ -6,9 +6,9 @@ use Dashboard\Form\Form;
 use Dashboard\Form\FormMethodEnum;
 use Dashboard\Resource\Messages;
 use Dashboard\Template\AbstractTemplate;
-use Dashboard\Template\TemplateInterface;
+use Dashboard\Template\CrudInterface;
 
-class Client extends AbstractTemplate implements TemplateInterface
+class Client extends AbstractTemplate implements CrudInterface
 {
     protected string $url = "/clientes";
     protected string $menu_name = "Clientes";

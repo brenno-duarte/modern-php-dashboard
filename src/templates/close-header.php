@@ -12,5 +12,5 @@
     <div class="row">
       <div class="col-lg-12">
 
-      <div class="card">
-            <div class="card-body pt-4">
+      <!-- <div class="card">
+            <div class="card-body pt-4"> -->

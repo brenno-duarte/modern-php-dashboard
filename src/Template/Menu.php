@@ -19,7 +19,7 @@ class Menu
 
     public function item(string $name)
     {
-        if ($name instanceof TemplateInterface) {
+        if ($name instanceof AbstractTemplate) {
             throw new TemplateException($name . " is not instance of 'AbstractTemplate' class");
         }
 
@@ -81,11 +81,12 @@ class Menu
 
     public function create()
     {
-        foreach ($this->item as $key => $link) {
+        foreach ($this->item as $link) {
             if (array_key_exists('url', $link)) {
                 $this->html .= Template::getTemplate('menu/menu.php', [
                     'link' => Template::redirect($link['url']),
-                    'menu_name' => $link['menu-name']
+                    'menu_name' => $link['menu-name'],
+                    'is_collapsed' => 'collapsed'
                 ]);
             } else {
                 $this->html .= Template::getTemplate('menu/menu-item.php', [
